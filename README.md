@@ -5,7 +5,7 @@ Princess Academy Repository for Group Project
 ## Project created by **Group Charmees**
 ![Boss Silhouette](https://github.com/LarzyArt/GameProj_PrincessAcademy/blob/main/for_readme.png)
 
-Princess Academy is a 2D story-driven RPG built using OOP principles for CSIT227 Final Project.
+Princess Academy is a 2D story-driven RPG built using OOP principles.
 
 The game features a chapter-based narrative, visual dialoguem and turn-based battles with unique character skills and enemy encounters.
 
