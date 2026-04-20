@@ -1,0 +1,150 @@
+@startuml Class Diagram
+skinparam classAttributeIconSize 0
+
+interface StatusEffectable {
+  + isStunned(): boolean
+  + applyStun(int)
+  + applyTaunt(int)
+  + applyDamageReduction(double, int)
+  + tickStatus()
+}
+
+interface Healable {
+  + healAlly(int)
+  + restoreMP(int)
+}
+
+abstract class Entity {
+  - name: String
+  - charClass: String
+  - type: String
+  - weapon: String
+  - healthPoints: int
+  - tauntTurns: int
+  - damageReductionTurns: int
+  - damageReductionPercent: double
+  - stunnedTurns: int
+  + takeDamage(int)
+  + isAlive(): boolean
+  + showStats()
+  + tickStatus()
+}
+
+Entity ..|> StatusEffectable : implements
+
+abstract class Character {
+  - manaPoints: int
+  + healAlly(int)
+  + restoreMP(int)
+  + useSkill(int, MobNPC, Character, Character[])
+  + getSkillList(): String[]
+  + getSkillTargetType(int): String
+}
+
+Character --|> Entity : extends
+Character ..|> Healable : implements
+
+class MobNPC {
+  - chapter: int
+  + useSkill(int, Character)
+  + showStats()
+}
+
+MobNPC --|> Entity : extends
+
+class Audry
+Audry --|> Character : extends
+
+class Giantha
+Giantha --|> Character : extends
+
+class Lazuli
+Lazuli --|> Character : extends
+
+class Lynzi
+Lynzi --|> Character : extends
+
+class Shiera
+Shiera --|> Character : extends
+
+class LavaBeast
+LavaBeast --|> MobNPC : extends
+
+class Resonara
+Resonara --|> MobNPC : extends
+
+class SirenEmpress
+SirenEmpress --|> MobNPC : extends
+
+class Kassundre
+Kassundre --|> MobNPC : extends
+
+class AstralGlob
+AstralGlob --|> MobNPC : extends
+
+class Twinkle
+Twinkle --|> MobNPC : extends
+
+abstract class BattleUIComponent {
+  - characters: Character[]
+  - mobs: MobNPC[]
+  - skillInput: Scanner
+  - currentChapter: int
+  + setCurrentChapter(int)
+  + execute()
+}
+
+class BattleHUD {
+  + execute()
+}
+
+BattleHUD --|> BattleUIComponent : extends
+
+class BattlePhases {
+  + execute()
+  + enemyPhase()
+  + characterPhase()
+}
+
+BattlePhases --|> BattleUIComponent : extends
+
+class GameUI {
+  - characters: Character[]
+  - mobs: MobNPC[]
+  - battleHUD: BattleHUD
+  - battlePhases: BattlePhases
+  - skillInput: Scanner
+  - currentChapter: int
+  + StartGame()
+  + isChapterEnemyAlive(int): boolean
+  + isBattleOngoing(): boolean
+  + StartBattle(Character[], MobNPC[])
+}
+
+GameUI *-- BattleHUD : has
+GameUI *-- BattlePhases : has
+
+class MainMenu {
+  - gameUI: GameUI
+  - skillInput: Scanner
+  + displayMenu()
+  + prompt(int)
+  + run()
+}
+
+MainMenu *-- GameUI : has
+
+class GameSystem {
+  - mainMenu: MainMenu
+  + MainMenu()
+}
+
+GameSystem *-- MainMenu : has
+
+class Game {
+  + main(String[])
+}
+
+Game *-- GameSystem : has
+
+@enduml

@@ -1,0 +1,51 @@
+@startuml Use Case Diagram
+
+actor Player
+
+usecase "Start Game" as UC1
+usecase "Select Story Mode" as UC2
+usecase "Select Chapter" as UC3
+usecase "Engage in Battle" as UC4
+usecase "View Battle Status" as UC5
+usecase "Choose and Use Skills" as UC6
+usecase "Heal Allies" as UC7
+usecase "Choose Next Action" as UC8
+usecase "Exit Game" as UC9
+
+Player --> UC1 : initiates
+UC1 --> UC2 : includes
+UC2 --> UC3 : includes
+UC3 --> UC4 : includes
+UC4 --> UC6 : includes
+UC4 --> UC5 : includes
+UC6 --> UC7 : extends
+UC4 --> UC8 : includes (after winning)
+UC8 --> UC3 : includes (select another chapter)
+UC8 --> UC9 : includes (return to menu and exit)
+UC1 --> UC9 : includes
+
+note right of UC3
+  Player selects a chapter before battle.
+end note
+
+note right of UC4
+  Player fights mobs in turns.
+end note
+
+note right of UC5
+  Player checks HP/MP status.
+end note
+
+note right of UC6
+  Player selects and executes skills (attack, etc.).
+end note
+
+note right of UC7
+  Player uses healing skills (optional for healers).
+end note
+
+note right of UC8
+  After winning: Choose to select another chapter or return to menu.
+end note
+
+@enduml
