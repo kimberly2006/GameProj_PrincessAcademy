@@ -1,12 +1,22 @@
-package charmees.finalproj.entities;
 
-public class Shiera extends GameCharacter {
-    public Shiera() {
-        super("Shiera", "Rogue", "Physical", "Dagger", 110, 50);
+public class Shiera extends Character {
+
+    public Shiera(String name, String charClass, String type, String weapon, int healthPoints, int manaPoints) {
+        super(name, charClass, type, weapon, healthPoints, manaPoints);
     }
-    
+
     @Override
-    public void performSkill(int skill, MobNPC target, GameCharacter ally, GameCharacter[] party) {
+    public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {
+        // if this character is stunned, they cannot use skills
+        if (this.isStunned()) {
+            System.out.println(this.getName() + " is stunned and cannot use skills.");
+            return;
+        }
+        shieraSkills(skill, target, ally);
+    }
+
+    // ----------------- Shiera's Skills -----------------
+    private void shieraSkills(int skill, MobNPC target, Character ally) {
         int damage = 0;
         switch (skill) {
             case 1: // Stone Spikes
@@ -17,9 +27,7 @@ public class Shiera extends GameCharacter {
                     for (int i = 0; i < hits; i++) {
                         damage += (int)(Math.random() * 10) + 1;
                     }
-                    this.lastSkillHits = hits;
-                    this.lastSkillDamage = damage;
-                    target.takeDamage(damage);
+                    target.takedamage(damage);
                     System.out.println(name + " used Stone Spikes! Hits " + hits + " times for " + damage + " damage.");
                 } else System.out.println(name + " doesn't have enough mana!");
                 break;
@@ -36,7 +44,7 @@ public class Shiera extends GameCharacter {
                 if (manaPoints >= 10) {
                     manaPoints -= 10;
                     damage = 50;
-                    target.takeDamage(damage);
+                    target.takedamage(damage);
                     // stun the enemy for 1 turn
                     target.applyStun(1);
                     System.out.println(name + " used Ultimate, Iron Maiden! Deals " + damage + " fixed damage and stuns enemy for 1 turn.");
@@ -47,19 +55,14 @@ public class Shiera extends GameCharacter {
 
     @Override
     public String[] getSkillList() {
-        return new String[] {
-            "Skill: Stone Spikes (Cost: 4 MP) \n\n- Hits 1-4 times for 1-10 damage each to a single enemy.",
-            "Skill: Earth Wall (Cost: 6 MP) \n\n- Reduces incoming damage by 20% for 4 turns.",
-            "Ultimate Skill: Iron Maiden (Cost: 10 MP) \n\n- Deals 50 fixed damage to a single enemy and stuns them for 1 turn."
-        };
-    }   
+        return new String[]{"1) Stone Spikes - Cost: 4 MP","2) Earth Wall - Cost: 6 MP","3) Iron Maiden - Cost: 10 MP"};
+    }
 
     @Override
     public String getSkillTargetType(int skill) {
-        if(skill == 2) {
-            return "SELF";
-        } else {
-            return "ENEMY";
+        switch (skill) {
+            case 2: return "SELF"; // Earth Wall
+            default: return "ENEMY";
         }
     }
 }
